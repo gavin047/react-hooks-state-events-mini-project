@@ -1,32 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
+// import {useState} from "react";
 
-function NewTaskForm({ onTaskFormSubmit, categories }) {
-	const [text, setText] = useState("");
-	const [category, setCategory] = useState("Code");
+export default  function NewTaskForm({onTaskFormSubmit, categories}) {
+  let newArr = categories.filter(cat => cat !== "All").map((cat, ind) => <option key={ind}>{cat}</option>);
+  // const[text, setText]= useState('')
+  // const [category, setCategory] = useState('code')
 
-
-	function handleSubmit(e) {
-		e.preventDefault();
-		onTaskFormSubmit({ text, category });
-		setText("");
-		setCategory("Code");
-	}
-	return (
-		<form className="new-task-form" onSubmit={handleSubmit}>
-			<label>
-				Details
-				<input type="text" value={text} onChange={(e) => setText(e.target.value)}/>
-			</label>
-			<label>
-				Category
-				<select value={category} onChange={(e) => setCategory(e.target.value)}>
-					{categories.map((cat) => ( <option key={cat}>{cat}</option>
-					))}
-				</select>
-			</label>
-			<input type="submit" value="Add task" />
-		</form>
-	);
+  // function handleSubmit(event){
+  //   event.preventDefault()
+  //   onTaskFormSubmit({text, category})
+  //   setText('')
+  //   setCategory('code')
+  // }
+  return (
+    <form className="new-task-form"
+    onSubmit={function (event) {
+      event.preventDefault();
+      let newTask = document.getElementsByName("text")[0].value;
+      let taskCategory = document.getElementsByName("category")[0].value;
+      onTaskFormSubmit({ "text": newTask, "category": taskCategory })
+    }}
+    autoComplete="off"
+    >
+      <label>
+        Details
+        <input type="text" name="text" />
+      </label>
+      <label>
+        Category
+        <select name="category" >{newArr}
+        </select>
+      </label>
+      <input type="submit" value="Add task" />
+    </form>
+  );
 }
-
-export default NewTaskForm;
